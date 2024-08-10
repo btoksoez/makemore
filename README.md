@@ -108,7 +108,7 @@ for k in range(100):
 	STEPS = 200000		# n steps
 	BATCH_SIZE = 64	#batch size
 
-## Part 3: Building a RNN
+## Part 3: Batch Normalization
 - we want initial logits to be uniform / close to zero, so that initial loss is low
 	- set biases to 0 initially, and weights to very small numbers
 	- check that tanh neurons are not dead (make weights of input layer closer to zero)
@@ -133,13 +133,19 @@ for k in range(100):
 	```
 - batch-normalization (2015 paper from google research team)
 	- normalize preactivation hidden states to be gaussian (can also be backpropagated through), but only at initialization
-		- use bnbias and bngain to change the normalization (shift it)
-	- usually add to every linear layer a batch normalization layer to stabilize training
+		- use bnbias and bngain / gamma and beta to change the normalization (shift it)
+	- usually add to every linear layer or convolutional layer a batch normalization layer to stabilize training
 	- cost of bn: it's normalized with first batch, but next batches are different, but this leads to regularization / data augmentation which is good
-	- 
+	- to forward single example, for sampling:
+		- calculate bnmean and bnstd over entire training set and use that
+		- or: you can also calculate bnmeans and std during training and use that (to not have extra step after training)
+	- makes biases unnecessary, because we calculate mean and substract it, which means we substract biases
+- why do you need tanh non-linear activation functions after each linear layer?
+	- otherwise multiple linear layers would just collapse to one big linear layer
 
-
-
+## Part 4: Manual Backpropagation
+- objective: implement forward and backward pass without using any PyTorch functions (only tensors)
+- 
 
 ## Definitions to remember
 - Keeping Dimensions: Ensures that the resulting tensor from the sum operation has the same shape as the original tensor, making element-wise operations straightforward.
@@ -159,5 +165,6 @@ for k in range(100):
 	- softmax activation over output neurons
 	- then calculating average negative log likelihood of predictions
 - batch normalization:
+	- add no bias  to weight layer if normalization layer is after weight layer
 - dead neurons:
 
