@@ -145,7 +145,42 @@ for k in range(100):
 
 ## Part 4: Manual Backpropagation
 - objective: implement forward and backward pass without using any PyTorch functions (only tensors)
-- 
+- broadcasting in the forward pass turns into summing in the backward pass and vice versa
+- always make sure that shapes of derivates are the same as shapes of their normal version
+
+```
+## dlogprobs
+# loss 	= - (a + b + c) / 3
+#		= -1/3a + -1/3b + - 1/3c
+#dloss/da	= -1/3
+#general: = -1/n for each of the values
+#all other values (that are not plucked out), have gradient 0, becasus they don't impact loss
+# so: start with tensor of same shape as logprobs, set everything to zero, set gradient of plucled out values to -1/n
+torch.zeros_like(logprobs).shape
+
+##dprobs
+# dLoss / dprobs = dLoss / dlogprobs * dlogprobs / dprobs
+# 	= dlogprobs * 1.0/probs (derivate of log(x) is 1/x)
+
+##dcounts_sum_inv
+# it's a broadcasted tensor, so that needs to be taken into account
+# need to sum the broadcasted tensor, because it's used multiple times
+
+##dcounts
+# b = a1 + a2 + a3 -> gets its gradient from b
+
+##dlogits
+# dlogits += F.one_hot(logits.max(1).indices, num_classes=logits.shape[1]) * dlogit_maxes
+# create a vector that has a 1 at each index of the max, rest 0's. then multiply that with global gradient
+
+##dh
+# need to transpose W2 and then matrix multiply with dlogits
+# a derivative of a matrix multiplication is a matrix multiplication
+# can use shapes as a guide to which ones to multiply, dh.shape needs to be h.shape
+
+##db2
+# needs to be of shape [27], so need to sum up dlogits over dimension 0, to get rid of 0th dimension and keep 1st (27)
+```
 
 ## Definitions to remember
 - Keeping Dimensions: Ensures that the resulting tensor from the sum operation has the same shape as the original tensor, making element-wise operations straightforward.
