@@ -1,7 +1,7 @@
 # Makemore:
 An Autoregressive Character-Level Language Model
 
-![image](./imgs/art.png)
+![image](./imgs/final.png)
 
 ## Introduction
 
@@ -10,6 +10,56 @@ This project, based on [@AndrejKarpathy's](https://github.com/karpathy) lecture 
 - **Bigram Model**: A basic model where one character predicts the next based on a lookup table of counts.
 - **MLP (Multilayer Perceptron)**: Following the approach of Bengio et al. (2003), this model leverages neural networks to improve prediction accuracy.
 - **CNN (Convolutional Neural Network)**: Inspired by the WaveNet paper by DeepMind (2016), this model captures more complex patterns in the data.
+
+## Usage
+
+### 1. Prepare the Dataset
+
+Ensure that you have a text file named `names.txt` in the same directory as your script. This file should contain the dataset of words, with each word on a new line. The model will use these words to learn character sequences.
+
+### 2. Run the Script
+
+To train the model and generate samples, simply run the `main.py` script:
+
+```bash
+python makemore.py
+```
+
+### 3. Modify Hyperparameters
+
+If you want to adjust the model or training settings, you can do so by modifying the following hyperparameters in the `main()` function:
+
+- `block_size`: Length of the context (number of characters) used to predict the next character.
+- `n_embd`: Number of dimensions for character embeddings.
+- `n_hidden`: Number of hidden neurons in the model.
+- `steps`: Number of training steps.
+- `batch_size`: Size of each training batch.
+
+### 4. Training Progress
+
+The script includes a progress bar during training, displaying the current step, loss, and elapsed time. You can monitor the training process directly in your console.
+
+### 5. Model Evaluation
+
+After training, the script evaluates the model on training, validation, and test splits, providing a loss for each split:
+
+```
+Evaluation example:
+train split: 1.234
+val split: 1.345
+test split: 1.456
+```
+
+### 6. Generate Samples
+
+Once the model is trained, it will generate character sequences based on the learned patterns. The generated sequences will be displayed in the console:
+
+```
+Sampling:
+carlyn.
+eloosa.
+jamira.
+```
 
 ## Learnings
 
