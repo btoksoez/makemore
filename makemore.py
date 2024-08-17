@@ -16,7 +16,7 @@ def main():
 	batch_size = 32 # batch size
 
 	# load dataset
-	words = load_words("./words.txt")
+	words = load_words("./names.txt")
 	stoi, itos, vocab_size = build_vocab(words)
 
 	n1 = int(0.8*len(words))
