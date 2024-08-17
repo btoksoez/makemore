@@ -12,11 +12,11 @@ def main():
 	block_size = 8 # context length: how many characters do we take to predict the next one?
 	n_embd = 24 # dimensions of character embeddings
 	n_hidden = 68 # number of hidden neurons
-	steps = 30000 # number of training steps
+	steps = 200000 # number of training steps
 	batch_size = 32 # batch size
 
 	# load dataset
-	words = load_words("./names.txt")
+	words = load_words("./words.txt")
 	stoi, itos, vocab_size = build_vocab(words)
 
 	n1 = int(0.8*len(words))

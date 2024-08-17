@@ -1,5 +1,5 @@
 # Makemore:
-An Autoregressive Character-Level Language Model
+An Autoregressive Character-Level Language Model that predicts new words
 
 ![image](./imgs/final.png)
 
