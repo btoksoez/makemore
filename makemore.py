@@ -12,7 +12,7 @@ def main():
 	block_size = 8 # context length: how many characters do we take to predict the next one?
 	n_embd = 24 # dimensions of character embeddings
 	n_hidden = 68 # number of hidden neurons
-	steps = 200000 # number of training steps
+	steps = 100000 # number of training steps
 	batch_size = 32 # batch size
 
 	# load dataset
@@ -32,13 +32,15 @@ def main():
 
 	# evaluate model
 	evaluate(optimized, train, dev, test)
-	# sample
-	sample(optimized, itos, block_size)
+	# sample (choose to sample new words or complete given word)
+	# sample(optimized, itos, block_size)
+	input_word = input("Word to complete: ")
+	sample_word(optimized, itos, stoi, input_word, block_size)
 
 def load_words(file):
 	words = open(file, 'r').read().splitlines()
-
 	return words
+
 
 def build_vocab(words):
 	# build the vocabulary of characters and mappings to/from integers
@@ -280,6 +282,25 @@ def sample(model, itos, block_size=5):
 				break
 
 		print(''.join(itos[i] for i in out))
+
+def sample_word(model, itos, stoi, word, block_size=5):
+	for _ in range(5):
+		out = []
+		context = [stoi[letter] for letter in word] # initialize with the word
+		# Pad the context if it's shorter than the block size
+		if len(context) < block_size:
+			context = [0] * (block_size - len(context)) + context
+		while True:
+			# forward pass
+			logits = model(torch.tensor([context])) # (1,block_size,d)
+			probs = F.softmax(logits, dim=1)
+			ix = torch.multinomial(probs, num_samples=1).item()
+			context = context[1:] + [ix]
+			out.append(ix)
+			if ix == 0:
+				break
+
+		print(word + ''.join(itos[i] for i in out))
 
 if __name__ == "__main__":
 	main()
